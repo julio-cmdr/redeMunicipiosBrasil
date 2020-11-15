@@ -56,6 +56,7 @@ class gmlGraph():
         
         cidades = list(set(cidades))
         cidades.sort()
+        coordenadas = []
         # Atribuindo as cidades IDs únicos.
         cont = 0
         d_cids = {}
@@ -65,6 +66,8 @@ class gmlGraph():
                 if cidade in self.estados[estado]:
                     # Atribuindo o ID de ordem léxica e o do IBGE.
                     d_cids[c] = [cont, self.estados[estado][cidade][0]]
+                    coordenadas.append([self.estados[estado][cidade][1], \
+                        self.estados[estado][cidade][2]])
                     cont += 1
         
         arestas = []
@@ -89,7 +92,9 @@ class gmlGraph():
                 g.vs[i]["name"] = d_cids[cidades[i]][1]
                 g.vs[i]["label"] = cidades[i].split('--')[0]
         
-        layout = g.layout_kamada_kawai()
+        #layout = g.layout_kamada_kawai()
+        #layout = g.layout_grid()
+        layout = g.layout_davidson_harel()
         igraph.plot(g,"dados/rede.pdf", layout=layout, bbox = (9000, 9000))
         g.save("dados/rede.gml", format="gml")
 
